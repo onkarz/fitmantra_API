@@ -20,7 +20,8 @@ app.use(
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://fitmantra.onrender.com/"
+    "https://fitmantra.onrender.com",
+    "http://localhost:9000"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
