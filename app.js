@@ -53,9 +53,8 @@ app.options("*", (req, res) => {
   }
 });
 
-app.get("/healthz", (req, res) => {
-  console.log("health check is processed");
-  return res.status(204).send();
+app.get("/", (req, res) => {
+res.header("Access-Control-Allow-Origin","http://localhost:9000");
 });
 
 app.use(cors());
