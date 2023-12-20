@@ -39,13 +39,31 @@ app.use((req, res, next) => {
   next();
 });
 
+app.options("*", (req, res) => {
+  console.log("preflight");
+  if (
+    req.headers.origin === "https://fitmantra.onrender.com" && req.headers.origin === "http://localhost:9000" &&
+    allowMethods.includes(req.headers["access-control-request-method"]) &&
+    allowHeaders.includes(req.headers["access-control-request-headers"])
+  ) {
+    console.log("pass");
+    return res.status(204).send();
+  } else {
+    console.log("fail");
+  }
+});
+
+app.get("/healthz", (req, res) => {
+  console.log("health check is processed");
+  return res.status(204).send();
+});
 
 app.use(cors());
-const corsOptions ={
-  origin:'http://localhost:9000', 
-  credentials:true,            //access-control-allow-credentials:true
-  optionSuccessStatus:200
-}
+const corsOptions = {
+  origin: "http://localhost:9000" &&  "https://fitmantra.onrender.com",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 app.use(cors(corsOptions));
 app.use(express.json());
 
