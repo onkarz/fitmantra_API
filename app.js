@@ -8,15 +8,6 @@ const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const dataSetRouter = require("./routes/dataSet");
 require("dotenv").config();
-
-app.use(cors());
-const corsOptions = {
-  origin: "http://127.0.0.1:9000" &&  "https://fitmantra.onrender.com",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
-
 app.use(bodyParser.json({ limit: "500mb" }));
 app.use(
   bodyParser.urlencoded({
@@ -24,47 +15,33 @@ app.use(
     limit: "500mb",
   })
 );
+app.use(cors());
 
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://fitmantra.onrender.com",
-    "http://localhost:9000"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  res.setHeader("Access-Control-Allow-Private-Network", true);
-  //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
-  res.setHeader("Access-Control-Max-Age", 7200);
+const allowedOrigins = [
+  "capacitor://localhost",
+  "ionic://localhost",
+  "http://localhost",
+  "http://localhost:8080",
+  "http://localhost:8100",
+];
 
-  next();
+// Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Origin not allowed by CORS"));
+    }
+  },
+};
+
+// Enable preflight requests for all routes
+app.options("*", cors(corsOptions));
+
+app.get("/", cors(corsOptions), (req, res, next) => {
+  res.json({ message: "This route is CORS-enabled for an allowed origin." });
 });
-
-app.options("*", (req, res) => {
-  console.log("preflight");
-  if (
-    req.headers.origin === "https://fitmantra.onrender.com" && req.headers.origin === "http://localhost:9000" &&
-    allowMethods.includes(req.headers["access-control-request-method"]) &&
-    allowHeaders.includes(req.headers["access-control-request-headers"])
-  ) {
-    console.log("pass");
-    return res.status(204).send();
-  } else {
-    console.log("fail");
-  }
-});
-
-app.get("/", (req, res) => {
-res.header("Access-Control-Allow-Origin","http://localhost:9000");
-});
-
 
 app.use(express.json());
 
