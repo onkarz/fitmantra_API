@@ -87,7 +87,7 @@ router.post("/author", async (req, res, next) => {
     const decodedPayload = await promisify(jwt.verify)(
       token,
       process.env.JWT_SECRET
-    );
+    );  
 
     console.log("Decode",decodedPayload);
     //check if user still exist using the token payload
