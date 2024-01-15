@@ -19,6 +19,10 @@ const DSetSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    checked:{
+      type:Boolean,
+      required:true
+    }
   },
   { timestamps: true }
 );

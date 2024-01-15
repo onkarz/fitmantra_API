@@ -1,5 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const OpenAIApi = require('openai');
+const Configuration = require('openai');
+const server = require('http').createServer();
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
@@ -8,6 +11,12 @@ const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const dataSetRouter = require("./routes/dataSet");
 require("dotenv").config();
+
+
+const configuration = new Configuration({
+  api_Key: process.env.OPENAI_API_KEY,
+});
+
 app.use(bodyParser.json({ limit: "500mb" }));
 app.use(
   bodyParser.urlencoded({
@@ -15,6 +24,11 @@ app.use(
     limit: "500mb",
   })
 );
+
+
+
+const openai = new OpenAIApi(configuration);
+
 
 app.use((req, res, next) => {
   res.header(
@@ -82,6 +96,24 @@ app.use((err, req, res, next) => {
   }
 });
 
+
+app.post("/chat", async (req, res) => {
+  const { message } = req.body;
+
+  console.log(req.body);
+
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "system", content: "You are a helpful assistant." }, { role: "user", content: message }],
+  });
+
+  const reply = completion.data.choices[0].message.content;
+
+  console.log(reply);
+
+  res.json({ reply });
+});
+
 mongoose
   .connect(
     "mongodb+srv://onkar:Onkar1234@cluster0.0garn5z.mongodb.net/?retryWrites=true&w=majority"
@@ -93,5 +125,11 @@ mongoose
     console.log(err);
   });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  // app.listen(8080, () => { 
+  //   console.log('Server up and running!'); 
+  // });
+
+  server.listen(8080, 'localhost'); // or server.listen(3001, '0.0.0.0'); for all interfaces
+server.on('listening', function() {
+    console.log('Express server started on port %s at %s', server.address().port, server.address().address);
+});

@@ -45,14 +45,15 @@ router.post("/", async (req, res) => {
   try {
     const { title, description, level } = req.body;
 
-    const { userEmail } = req.body;
+    const { userEmail, checked } = req.body;
     console.log("Body", req.body);
 
     const dataSet = await dataSetModel.create({
       title,
       description,
       level,
-      userEmail
+      userEmail,
+      checked
     });
 
     console.log(dataSet);
