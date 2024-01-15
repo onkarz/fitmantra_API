@@ -13,10 +13,6 @@ const dataSetRouter = require("./routes/dataSet");
 require("dotenv").config();
 
 
-const configuration = new Configuration({
-  api_Key: process.env.OPENAI_API_KEY,
-});
-
 app.use(bodyParser.json({ limit: "500mb" }));
 app.use(
   bodyParser.urlencoded({
@@ -27,7 +23,7 @@ app.use(
 
 
 
-const openai = new OpenAIApi(configuration);
+
 
 
 app.use((req, res, next) => {
@@ -97,22 +93,6 @@ app.use((err, req, res, next) => {
 });
 
 
-app.post("/chat", async (req, res) => {
-  const { message } = req.body;
-
-  console.log(req.body);
-
-  const completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "system", content: "You are a helpful assistant." }, { role: "user", content: message }],
-  });
-
-  const reply = completion.data.choices[0].message.content;
-
-  console.log(reply);
-
-  res.json({ reply });
-});
 
 mongoose
   .connect(
@@ -125,11 +105,11 @@ mongoose
     console.log(err);
   });
 
-  // app.listen(8080, () => { 
-  //   console.log('Server up and running!'); 
-  // });
+  app.listen(8080, () => { 
+    console.log('Server up and running!'); 
+  });
 
-  server.listen(8080, 'localhost'); // or server.listen(3001, '0.0.0.0'); for all interfaces
-server.on('listening', function() {
-    console.log('Express server started on port %s at %s', server.address().port, server.address().address);
-});
+//   server.listen(8080, 'localhost'); 
+// server.on('listening', function() {
+//     console.log('Express server started on port %s at %s', server.address().port, server.address().address);
+// });
