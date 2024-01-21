@@ -1,10 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const httpProxy = require('http-proxy');
 const OpenAIApi = require('openai');
 const Configuration = require('openai');
 const server = require('http').createServer();
 const cors = require("cors");
 const app = express();
+const proxy = httpProxy.createProxyServer();
 const mongoose = require("mongoose");
 const authRouter = require("./auth/auth");
 const userRouter = require("./routes/user");
@@ -14,6 +16,12 @@ const preferenceRouter = require("./routes/preference");
 const dayWiseWorkout = require("./routes/dayWise");
 require("dotenv").config();
 
+const targetURL = 'https://fitmantra-a3a5869d2287.herokuapp.com';
+
+app.all('/api/*', (req, res) => {
+  // Forward the request to the target URL
+  proxy.web(req, res, { target: targetURL });
+});
 
 app.use(bodyParser.json({ limit: "500mb" }));
 app.use(
@@ -43,7 +51,8 @@ app.use((req, res, next) => {
     "https://fitmantra.onrender.com/api/v1/auth/login",
     "https://fitmantra.onrender.com/api/v1/auth/register",
     "https://fitmantraapi-production.up.railway.app/api/v1/auth/login",
-    "https://fitmantraapi-production.up.railway.app/api/v1/auth/register"
+    "https://fitmantraapi-production.up.railway.app/api/v1/auth/register",
+    ""
   ); // Replace with your frontend URL
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
