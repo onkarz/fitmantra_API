@@ -10,6 +10,8 @@ const authRouter = require("./auth/auth");
 const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const dataSetRouter = require("./routes/dataSet");
+const preferenceRouter = require("./routes/preference");
+const dayWiseWorkout = require("./routes/dayWise");
 require("dotenv").config();
 
 
@@ -35,6 +37,7 @@ app.use((req, res, next) => {
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:8100",
+    "http://127.0.0.1:8080",
     "https://fitmantra.onrender.com",
     "https://fitmantra.onrender.com/api/v1/posts"
   ); // Replace with your frontend URL
@@ -56,6 +59,7 @@ const allowedOrigins = [
   "http://localhost",
   "http://localhost:8080",
   "http://localhost:8100",
+  "http://127.0.0.1:8080",
   "https://fitmantra.onrender.com",
   "https://fitmantra.onrender.com/api/v1/posts",
 ];
@@ -84,6 +88,8 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/datasets", dataSetRouter);
 app.use("/api/v1/posts", postRouter);
+app.use("/api/v1/preference", preferenceRouter);
+app.use("/api/v1/daywiseworkout", dayWiseWorkout);
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
     res.status(400).json({ error: "Bad request - request entity too large" });
