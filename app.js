@@ -39,7 +39,9 @@ app.use((req, res, next) => {
     "http://localhost:8100",
     "http://127.0.0.1:8080",
     "https://fitmantra.onrender.com",
-    "https://fitmantra.onrender.com/api/v1/posts"
+    "https://fitmantra.onrender.com/api/v1/posts",
+    "https://fitmantra.onrender.com/api/v1/auth/login",
+    "https://fitmantra.onrender.com/api/v1/auth/register"
   ); // Replace with your frontend URL
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -62,6 +64,8 @@ const allowedOrigins = [
   "http://127.0.0.1:8080",
   "https://fitmantra.onrender.com",
   "https://fitmantra.onrender.com/api/v1/posts",
+  "https://fitmantra.onrender.com/api/v1/auth/login",
+  "https://fitmantra.onrender.com/api/v1/auth/register"
 ];
 
 // Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
