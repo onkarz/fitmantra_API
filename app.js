@@ -16,9 +16,9 @@ const preferenceRouter = require("./routes/preference");
 const dayWiseWorkout = require("./routes/dayWise");
 require("dotenv").config();
 
-const targetURL = 'https://fitmantra-a3a5869d2287.herokuapp.com';
+const targetURL = 'https://fitmantra.onrender.com';
 
-app.all('/api/*', (req, res) => {
+app.all('/api/v1/*', (req, res) => {
   // Forward the request to the target URL
   proxy.web(req, res, { target: targetURL });
 });
