@@ -4,8 +4,8 @@ const { ObjectId } = mongoose.Schema.Types;
 const DayWiseSchema = new mongoose.Schema(
   {
     authorId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      required: true,
     },
     authorEmail: {
       type: String,

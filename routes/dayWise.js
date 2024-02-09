@@ -20,8 +20,10 @@ const dayWiseModel = require("../models/dayWiseModel");
 
 router.get("/author/:authorId", async (req, res) => {
   try {
-    const dayWise = await dayWiseModel.find({ authorId: req.params.authorId });
+    const { authorId } = req.body;
 
+    const dayWise = await dayWiseModel.find({ authorId: req.params.authorId });
+    
     if (!dayWise) {
       return res.status(404).json({
         status: "Failed",
@@ -30,7 +32,7 @@ router.get("/author/:authorId", async (req, res) => {
     } else {
       res.status(200).json({
         status: "success",
-        dayWise,
+        dayWise,      
       });
     }
   } catch (err) {
